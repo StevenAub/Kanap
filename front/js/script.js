@@ -8,7 +8,7 @@ const fetchProduct = async () => {
         //Creation des elements
         let p = document.getElementById('items');
         for (i = 0; i < 1; i++) {
-          let e = document.createElement('div');
+          let e = document.createElement('a');
           e.innerHTML = `<a href="./product.html?id=42">
   <article>
     <img src=${post.imageUrl} alt="photo du cannapé ${post.name}">
