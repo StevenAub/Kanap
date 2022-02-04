@@ -9,7 +9,7 @@ const fetchProduct = async () => {
         let p = document.getElementById('items');
         for (i = 0; i < 1; i++) {
           let e = document.createElement('a');
-          e.innerHTML = `<a href="./product.html?id=42">
+          e.innerHTML = `<a href="./product.html?=${post._id}">
   <article>
     <img src=${post.imageUrl} alt="photo du cannapé ${post.name}">
     <h3 class="productName">${post.name}</h3>
@@ -19,7 +19,7 @@ const fetchProduct = async () => {
           p.appendChild(e);
         }
       }
-    });
+    })
+    .catch((err) => alert('Oups, il y a une erreure!', err));
 };
-
 fetchProduct();
