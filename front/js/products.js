@@ -32,7 +32,27 @@ const fetchProduit = async () => {
 
         colorKanap[colorKanap.length] = newOption;
       });
-    });
+
+      //Bouton ajout au panier
+      const addToCart = document.getElementById('addToCart');
+
+      addToCart.addEventListener('click', (e) => {
+        function getValue() {
+          // Sélectionner l'élément input et récupérer sa valeur
+          let quantity = document.getElementById('quantity').value;
+          let color = document.getElementById('colors').value;
+          // Afficher la valeur
+          if (quantity == 0 || color == '') {
+            alert('Veuillez remplir les champs');
+          } else {
+            console.log(quantity, color);
+          }
+        }
+
+        getValue();
+      });
+    })
+    .catch((err) => alert('Oups, il y a une erreure! ', err));
 };
 
 fetchProduit();

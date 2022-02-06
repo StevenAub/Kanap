@@ -20,6 +20,6 @@ const fetchProduct = async () => {
         }
       }
     })
-    .catch((err) => alert('Oups, il y a une erreure!', err));
+    .catch((err) => alert('Oups, il y a une erreure! ', err));
 };
 fetchProduct();
