@@ -1,17 +1,18 @@
 //Lier les articles de la page index
-const product = window.location.search.split('?=').join('');
+const productId = window.location.search.split('?=').join('');
 const nameKanap = document.getElementById('title');
 const descriptionKanap = document.getElementById('description');
 const imageKanap = document.querySelector('.item__img');
 const priceKanap = document.querySelector('#price');
-productData = [];
-//console.log(product);
 
-const fetchProduit = async () => {
-  await fetch(`http://localhost:3000/api/products/${product}`)
+//console.log(product);
+//----------------------------------------------------------------------------------------------------------------------------
+async function fetchProduit() {
+  await fetch(`http://localhost:3000/api/products/` + productId)
     .then((res) => res.json())
-    .then((promise) => {
-      productData = promise;
+    .then((e) => {
+      productData = e;
+
       //donne le titre a la page
       document.title = productData.name;
       //console.log(productData);
@@ -32,27 +33,19 @@ const fetchProduit = async () => {
 
         colorKanap[colorKanap.length] = newOption;
       });
-
-      //Bouton ajout au panier
-      const addToCart = document.getElementById('addToCart');
-
-      addToCart.addEventListener('click', (e) => {
-        function getValue() {
-          // Sélectionner l'élément input et récupérer sa valeur
-          let quantity = document.getElementById('quantity').value;
-          let color = document.getElementById('colors').value;
-          // Afficher la valeur
-          if (quantity == 0 || color == '') {
-            alert('Veuillez remplir les champs');
-          } else {
-            console.log(quantity, color);
-          }
-        }
-
-        getValue();
-      });
     })
-    .catch((err) => alert('Oups, il y a une erreure! ', err));
-};
-
+    .catch((err) => alert('Oups, il y a une erreur! ', err));
+}
 fetchProduit();
+
+const addToCart = document.getElementById('addToCart');
+
+addToCart.addEventListener('click', () => {
+  color = document.getElementById('colors').value;
+  quantity = document.getElementById('quantity').value;
+  quantity = Number(quantity);
+  console.log(typeof quantity);
+
+  addCart({ id: productId, color: color, quantity: quantity });
+  getCart(quantity);
+});

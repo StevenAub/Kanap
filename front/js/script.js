@@ -1,6 +1,6 @@
 //Lien vers l'API
-const fetchProduct = async () => {
-  await fetch('http://localhost:3000/api/products')
+async function fetchProduct() {
+  fetch('http://localhost:3000/api/products')
     .then((res) => res.json())
     .then((elements) => {
       //recuperation des données
@@ -21,5 +21,5 @@ const fetchProduct = async () => {
       }
     })
     .catch((err) => alert('Oups, il y a une erreure! ', err));
-};
+}
 fetchProduct();
