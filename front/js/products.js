@@ -15,7 +15,6 @@ async function fetchProduit() {
 
       //donne le titre a la page
       document.title = productData.name;
-      //console.log(productData);
       //envoi les données de l'api sur ma page produit
       descriptionKanap.innerHTML = productData.description;
       nameKanap.innerHTML = productData.name;
@@ -43,36 +42,44 @@ const addToCart = document.getElementById('addToCart');
 addToCart.addEventListener('click', () => {
   color = document.getElementById('colors').value;
   quantity = document.getElementById('quantity').value;
-  console.log(quantity);
-  if (color === '' || quantity === '0') {
-    alert('Veuillez remplir les champs');
-    console.log('coucou');
-  }
+
   let optionCart = {
     id: productId,
-    name: productData.name,
     color: color,
-    quantity: Number(quantity),
-    image: productData.imageUrl
+    quantity: Number(quantity)
   };
   let productInLocalStorage = JSON.parse(localStorage.getItem('produits'));
-  if (productInLocalStorage === null) {
+  if (color === '' || quantity === '0') {
+    alert('Veuillez remplir les champs');
+  } else if (productInLocalStorage === null) {
     productInLocalStorage = [];
     productInLocalStorage.push(optionCart);
     localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
+    if (quantity == 1) {
+      alert(quantity + ' produit a été ajouté dans votre panier.');
+    } else {
+      alert(quantity + ' produits ont été ajoutés dans votre panier');
+    }
   } else if (productInLocalStorage !== null) {
+    let add = true;
     for (let i of productInLocalStorage) {
-      console.log();
-      console.log(i.name);
-
       if (optionCart.id === i.id && optionCart.color === i.color) {
+        add = false;
         i.quantity = i.quantity += optionCart.quantity;
+        alert('Votre panier a été mis à jour.');
         localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
-      } else if (optionCart.id !== i.id || optionCart.color !== i.color) {
-        productInLocalStorage.push(optionCart);
-        localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
-        break;
       }
+    }
+
+    if (add) {
+      if (quantity == 1) {
+        alert(quantity + ' produit a été ajouté dans votre panier.');
+      } else {
+        alert(quantity + ' produits ont été ajoutés dans votre panier');
+      }
+
+      productInLocalStorage.push(optionCart);
+      localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
     }
   }
 });
