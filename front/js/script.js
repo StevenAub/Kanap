@@ -20,6 +20,6 @@ async function fetchProduct() {
         }
       }
     })
-    .catch((err) => alert('Oups, il y a une erreur! ', err));
+    .catch((err) => alert('Une erreur est survenue ' + '(' + err + ')'));
 }
 fetchProduct();
