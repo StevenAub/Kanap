@@ -15,13 +15,12 @@ async function recupererPrix() {
   }
 }
 //Si mon LocalStorage est vide
-if (productInLocalStorage === null) {
+if (productInLocalStorage === null || productInLocalStorage.length === 0) {
   const titre = document.querySelector('.cartAndFormContainer');
   const title = titre.childNodes;
   delete productInLocalStorage;
   title[1].textContent = `Votre panier est vide`;
 }
-
 //affiche les produit de mon local storage dans panier
 async function affichePrixSurPanier() {
   await recupererPrix();
@@ -66,7 +65,9 @@ async function affichePrixSurPanier() {
         }
       }
     });
+
     deleteProductInCart();
+    changeQuantityCart();
   }
 }
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -78,15 +79,11 @@ function deleteProductInCart() {
       const article = btn.closest('article');
       const articleID = article.dataset.id;
       const articleColor = article.dataset.color;
-
-      console.log(productInLocalStorage);
       for (let i = 0; i < productInLocalStorage.length; i++) {
         if (
           articleID === productInLocalStorage[i].id &&
           articleColor === productInLocalStorage[i].color
         ) {
-          console.log('coucou');
-          console.log(productInLocalStorage[i]);
           productInLocalStorage.splice(i, 1);
           localStorage.setItem(
             'produits',
@@ -98,9 +95,48 @@ function deleteProductInCart() {
     });
   });
 }
+//------------------------------------------------------------------------------------------------------------------
+//Changer la quantité d'un produit depuis la page panier avec l'input
+function changeQuantityCart() {
+  const inputQuantity = document.querySelectorAll('#itemQuantity');
+  inputQuantity.forEach((e) => {
+    e.addEventListener('change', () => {
+      valueInput = Number(e.value);
+      const article = e.closest('article');
+      const articleID = article.dataset.id;
+      const articleColor = article.dataset.color;
+      console.log(valueInput);
+      for (let i = 0; i < productInLocalStorage.length; i++) {
+        if (
+          articleID === productInLocalStorage[i].id &&
+          articleColor === productInLocalStorage[i].color
+        ) {
+          productInLocalStorage[i].quantity = valueInput;
+          console.log(productInLocalStorage);
+          localStorage.setItem(
+            'produits',
+            JSON.stringify(productInLocalStorage)
+          );
+          location.reload();
+          if (productInLocalStorage[i].quantity === 0) {
+            productInLocalStorage.splice(i, 1);
+            console.log(productInLocalStorage);
+            localStorage.setItem(
+              'produits',
+              JSON.stringify(productInLocalStorage)
+            );
+            location.reload();
+          }
+        }
+      }
+    });
+  });
+}
 
 //------------------------------------------------------------------------------------------------------------------
 //Calucler la quantitée Total des articles
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
 let QuantityTotalCalcul = [];
 async function CalculerQuantitee() {
   for (let m = 0; m < productInLocalStorage.length; m++) {
@@ -109,11 +145,10 @@ async function CalculerQuantitee() {
     QuantityTotalCalcul.push(quantiteProduitPanier);
   }
 }
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
-const quantityTotal = QuantityTotalCalcul.reduce(reducer, 0);
-document.getElementById('totalQuantity').textContent = quantityTotal;
-
 CalculerQuantitee();
+const quantityTotal = QuantityTotalCalcul.reduce(reducer, 0);
+
+document.getElementById('totalQuantity').textContent = quantityTotal;
 
 //-------------------------------------------------------------------------------------------------------------------
 //Calculer la somme Total des Produits
@@ -129,30 +164,3 @@ async function calculateSum() {
 }
 
 calculateSum();
-
-//-------------------------------------------------------------------------------------------------------------------
-//Recuperer les infos client + infos commande
-
-const command = document.getElementById('order');
-let commandClient = [];
-command.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  lastNameId = document.getElementById('lastName').value;
-  firstNameId = document.getElementById('firstName').value;
-  addressId = document.getElementById('address').value;
-  cityId = document.getElementById('city').value;
-  emailId = document.getElementById('email').value;
-  // localStorage.removeItem('produits');
-  // alert('Commande validée.');
-  infoClient = {
-    nom: lastNameId,
-    prenom: firstNameId,
-    addresse: addressId,
-    ville: cityId,
-    email: emailId,
-    commande: productInLocalStorage
-  };
-  commandClient.push(infoClient);
-  //location.reload();
-});
