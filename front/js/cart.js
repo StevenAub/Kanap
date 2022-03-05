@@ -11,26 +11,26 @@ async function recupererPrix() {
   if (!requete.ok) {
     alert('Un problème est survenu.');
   } else {
-    donnees = await requete.json();
+    donnees = await requete.json(); //RZF everything in english or in french not both
   }
 }
 //Si mon LocalStorage est vide
 if (productInLocalStorage === null || productInLocalStorage.length === 0) {
   const titre = document.querySelector('.cartAndFormContainer');
   const title = titre.childNodes;
-  delete productInLocalStorage;
+  delete productInLocalStorage;  //RZF : Useless => remove
   title[1].textContent = `Votre panier est vide`;
 }
 //affiche les produit de mon local storage dans panier
-async function affichePrixSurPanier() {
+async function affichePrixSurPanier() {  //RZF everything in english or in french not both
   await recupererPrix();
 
   if (productInLocalStorage !== null) {
     donnees.forEach((element) => {
       for (i = 0; i < productInLocalStorage.length; i++) {
         if (productInLocalStorage[i].id === element._id) {
-          price = {
-            prix: element.price,
+          price = {  //RZF Missing const
+            prix: element.price, //RZF everything in english or in french not both
             image: element.imageUrl,
             name: element.name
           };
@@ -38,6 +38,7 @@ async function affichePrixSurPanier() {
             element.price * productInLocalStorage[i].quantity;
           priceProduct.push(priceCartProduct);
           let e = document.createElement('article');
+          //RZF Maybe the use of a HTML template is cleaner
           e.innerHTML = `<article class="cart__item" data-id="${productInLocalStorage[i].id}" data-color="${productInLocalStorage[i].color}">
     <div class="cart__item__img">
       <img src=${price.image} alt="Photographie du canapé ${price.name}">
@@ -61,7 +62,7 @@ async function affichePrixSurPanier() {
   </article>`;
           article.appendChild(e);
 
-          //------------------------------------------------------------------------------------------------------------------
+          //------------------------------------------------------------------------------------------------------------------  //RZF Useless
         }
       }
     });
@@ -70,7 +71,7 @@ async function affichePrixSurPanier() {
     changeQuantityCart();
   }
 }
-//-----------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------  //RZF Useless
 //Suppression des article depuis la page panier
 function deleteProductInCart() {
   const btnDelete = document.querySelectorAll('.deleteItem');
@@ -95,13 +96,13 @@ function deleteProductInCart() {
     });
   });
 }
-//------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------  //RZF Useless
 //Changer la quantité d'un produit depuis la page panier avec l'input
 function changeQuantityCart() {
   const inputQuantity = document.querySelectorAll('#itemQuantity');
   inputQuantity.forEach((e) => {
     e.addEventListener('change', () => {
-      valueInput = Number(e.value);
+      valueInput = Number(e.value); // RZF missing const
       const article = e.closest('article');
       const articleID = article.dataset.id;
       const articleColor = article.dataset.color;
@@ -133,12 +134,12 @@ function changeQuantityCart() {
   });
 }
 
-//------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------  //RZF Useless
 //Calucler la quantitée Total des articles
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
+const reducer = (accumulator, currentValue) => accumulator + currentValue;  //RZF reducer isn't explicit => rename sum
 
 let QuantityTotalCalcul = [];
-async function CalculerQuantitee() {
+async function CalculerQuantitee() {  // RZF Why CalculerQuantitEE with 2 'e'
   for (let m = 0; m < productInLocalStorage.length; m++) {
     let quantiteProduitPanier = productInLocalStorage[m].quantity;
     //mettre les quantiter dans le tableau
@@ -146,11 +147,10 @@ async function CalculerQuantitee() {
   }
 }
 CalculerQuantitee();
-const quantityTotal = QuantityTotalCalcul.reduce(reducer, 0);
-
+const quantityTotal = QuantityTotalCalcul.reduce(reducer, 0); // RZF Inline
 document.getElementById('totalQuantity').textContent = quantityTotal;
 
-//-------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------  //RZF Useless
 //Calculer la somme Total des Produits
 let sumTotalCalcul = [];
 async function calculateSum() {
@@ -159,7 +159,7 @@ async function calculateSum() {
     sumTotalCalcul.push(e);
   });
 
-  const sumTotalQuantity = sumTotalCalcul.reduce(reducer, 0);
+  const sumTotalQuantity = sumTotalCalcul.reduce(reducer, 0); //RZF Inline
   document.getElementById('totalPrice').textContent = sumTotalQuantity;
 }
 

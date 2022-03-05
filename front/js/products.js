@@ -40,10 +40,10 @@ fetchProduit();
 const addToCart = document.getElementById('addToCart');
 
 addToCart.addEventListener('click', () => {
-  color = document.getElementById('colors').value;
-  quantity = document.getElementById('quantity').value;
+  color = document.getElementById('colors').value; //RZF missing const
+  quantity = document.getElementById('quantity').value; //RZF missing const
 
-  let optionCart = {
+  let optionCart = { //RZF convert let to const if possible
     id: productId,
     color: color,
     quantity: Number(quantity)
@@ -55,7 +55,10 @@ addToCart.addEventListener('click', () => {
     productInLocalStorage = [];
     productInLocalStorage.push(optionCart);
     localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
-    if (quantity == 1) {
+    // RZF the 5 lines of codes bellow can be shorter with a ternary
+    // const message = quantity + (quantity === 1) ? ' produit a été ajouté dans votre panier.' : ' produits ont été ajoutés dans votre panier';
+    // alert(message);
+    if (quantity == 1) { //RZF always use strict operator for comparaison
       alert(quantity + ' produit a été ajouté dans votre panier.');
     } else {
       alert(quantity + ' produits ont été ajoutés dans votre panier');
@@ -72,7 +75,7 @@ addToCart.addEventListener('click', () => {
     }
 
     if (add) {
-      if (quantity == 1) {
+      if (quantity == 1) { //RZF always use strict operator for comparaison
         alert(quantity + ' produit a été ajouté dans votre panier.');
       } else {
         alert(quantity + ' produits ont été ajoutés dans votre panier');
