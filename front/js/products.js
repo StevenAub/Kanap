@@ -5,8 +5,6 @@ const descriptionKanap = document.getElementById('description');
 const imageKanap = document.querySelector('.item__img');
 const priceKanap = document.querySelector('#price');
 
-//console.log(product);
-//----------------------------------------------------------------------------------------------------------------------------
 async function fetchProduit() {
   await fetch(`http://localhost:3000/api/products/` + productId)
     .then((res) => res.json())
@@ -40,10 +38,10 @@ fetchProduit();
 const addToCart = document.getElementById('addToCart');
 
 addToCart.addEventListener('click', () => {
-  color = document.getElementById('colors').value;
-  quantity = document.getElementById('quantity').value;
+  const color = document.getElementById('colors').value;
+  const quantity = document.getElementById('quantity').value;
 
-  let optionCart = {
+  const optionCart = {
     id: productId,
     color: color,
     quantity: Number(quantity)
@@ -55,11 +53,11 @@ addToCart.addEventListener('click', () => {
     productInLocalStorage = [];
     productInLocalStorage.push(optionCart);
     localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
-    if (quantity == 1) {
-      alert(quantity + ' produit a été ajouté dans votre panier.');
-    } else {
-      alert(quantity + ' produits ont été ajoutés dans votre panier');
-    }
+    const message =
+      quantity + (quantity === 1)
+        ? quantity + ' produit a été ajouté dans votre panier.'
+        : quantity + ' produits ont été ajoutés dans votre panier';
+    alert(message);
   } else if (productInLocalStorage !== null) {
     let add = true;
     for (let i of productInLocalStorage) {
@@ -72,15 +70,13 @@ addToCart.addEventListener('click', () => {
     }
 
     if (add) {
-      if (quantity == 1) {
-        alert(quantity + ' produit a été ajouté dans votre panier.');
-      } else {
-        alert(quantity + ' produits ont été ajoutés dans votre panier');
-      }
-
+      const message =
+        quantity === '1'
+          ? quantity + ' produit a été ajouté dans votre panier.'
+          : quantity + ' produits ont été ajoutés dans votre panier';
+      alert(message);
       productInLocalStorage.push(optionCart);
       localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
     }
   }
 });
-//--------------------------------------------------------------------------------------------------------
