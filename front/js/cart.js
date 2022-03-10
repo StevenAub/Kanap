@@ -1,7 +1,6 @@
 let productInLocalStorage = JSON.parse(localStorage.getItem('produits'));
 let article = document.getElementById('cart__items');
 let priceProduct = [];
-
 //Je recupere l'id et le prix du produit sur mon api
 const url = 'http://localhost:3000/api/products';
 async function retrievePrice() {
@@ -23,7 +22,6 @@ if (productInLocalStorage === null || productInLocalStorage.length === 0) {
 //affiche les produit de mon local storage dans panier
 async function displayPrice() {
   await retrievePrice();
-
   if (productInLocalStorage !== null) {
     data.forEach((element) => {
       for (i = 0; i < productInLocalStorage.length; i++) {
@@ -126,10 +124,8 @@ function changeQuantityCart() {
     });
   });
 }
-
 //Calucler la quantitée Total des articles
 const sum = (accumulator, currentValue) => accumulator + currentValue;
-
 let totalQuantityCalculation = [];
 async function calculateQuantity() {
   {
@@ -142,9 +138,7 @@ async function calculateQuantity() {
 }
 calculateQuantity();
 const quantityTotal = totalQuantityCalculation.reduce(sum, 0);
-
 document.getElementById('totalQuantity').textContent = quantityTotal;
-
 //Calculer la somme Total des Produits
 let sumTotalCalcul = [];
 async function calculateSum() {
@@ -156,7 +150,6 @@ async function calculateSum() {
   const sumTotalQuantity = sumTotalCalcul.reduce(sum, 0);
   document.getElementById('totalPrice').textContent = sumTotalQuantity;
 }
-
 calculateSum();
 
 const form = document.querySelector('form');

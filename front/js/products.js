@@ -10,7 +10,6 @@ async function fetchProduit() {
     .then((res) => res.json())
     .then((e) => {
       productData = e;
-
       //donne le titre a la page
       document.title = productData.name;
       //envoi les données de l'api sur ma page produit
@@ -18,7 +17,6 @@ async function fetchProduit() {
       nameKanap.innerHTML = productData.name;
       imageKanap.innerHTML = `<img src="${productData.imageUrl}"></img>`;
       priceKanap.innerHTML = productData.price;
-
       //Option de couleurs
       //Je selectionne mon element html
       const colorKanap = document.querySelector('select');
@@ -54,7 +52,7 @@ addToCart.addEventListener('click', () => {
     productInLocalStorage.push(optionCart);
     localStorage.setItem('produits', JSON.stringify(productInLocalStorage));
     const message =
-      quantity + (quantity === 1)
+      quantity === '1'
         ? quantity + ' produit a été ajouté dans votre panier.'
         : quantity + ' produits ont été ajoutés dans votre panier';
     alert(message);
