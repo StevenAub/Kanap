@@ -174,7 +174,7 @@ const errorDisplay = (tag, message, valid) => {
   }
 };
 const firstNameChecker = (value) => {
-  if (!value.match(/^[a-zA-Z-]*$/)) {
+  if (!value.match(/^[A-Za-zÀ-ÿ-]*$/)) {
     errorDisplay('firstName', "Le prénom n'est pas valide");
     firstName = null;
   } else {
@@ -183,7 +183,7 @@ const firstNameChecker = (value) => {
   }
 };
 const lastNameChecker = (value) => {
-  if (!value.match(/^[a-zA-Z-]*$/)) {
+  if (!value.match(/^[A-Za-zÀ-ÿ-]*$/)) {
     errorDisplay('lastName', "Le nom n'est pas valide");
     lastName = null;
   } else {
