@@ -212,7 +212,7 @@ const cityChecker = (value) => {
 const emailChecker = (value) => {
   if (
     !value.match(
-      /^[a-zA-Z0-9._-]{1,20}[@]{1}[a-zA-Z0-9]{1,20}[.]{1}[a-z]{1,10}$/
+      /^[a-zA-Z0-9._-]{1,20}[@]{1}[a-zA-Z0-9-_]{1,20}[.]{1}[a-z]{1,10}$/
     )
   ) {
     errorDisplay('email', "L'adresse email n'est pas valide");
@@ -257,7 +257,7 @@ let orderId = 0;
 command.addEventListener('click', (e) => {
   e.preventDefault();
   console.log(productInLocalStorage);
-  if (productInLocalStorage === null) {
+  if (productInLocalStorage === null || productInLocalStorage.length === 0) {
     alert('Aucun produit dans votre panier.');
   } else if (validInput === true) {
     let order = {
