@@ -32,7 +32,7 @@ async function fetchProduit() {
     .catch((err) => alert('Oups, il y a une erreur! ', err));
 }
 fetchProduit();
-
+//Fonction d'ajout au panier/localStorage
 const addToCart = document.getElementById('addToCart');
 
 addToCart.addEventListener('click', () => {
