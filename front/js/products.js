@@ -45,7 +45,7 @@ addToCart.addEventListener('click', () => {
     quantity: Number(quantity)
   };
   let productInLocalStorage = JSON.parse(localStorage.getItem('produits'));
-  if (color === '' || quantity === '0') {
+  if (color === '' || quantity === '0' || quantity < 0) {
     alert('Veuillez remplir les champs');
   } else if (productInLocalStorage === null) {
     productInLocalStorage = [];

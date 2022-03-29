@@ -1,6 +1,7 @@
 let productInLocalStorage = JSON.parse(localStorage.getItem('produits'));
 let article = document.getElementById('cart__items');
 let priceProduct = [];
+let data;
 
 //Je recupere l'id et le prix du produit sur mon api
 const url = 'http://localhost:3000/api/products';
@@ -75,7 +76,6 @@ function deleteProductInCart() {
     btn.addEventListener('click', () => {
       const article = btn.closest('article');
       const articleID = article.dataset.id;
-      console.log(article);
       const articleColor = article.dataset.color;
       for (let i = 0; i < productInLocalStorage.length; i++) {
         if (
@@ -119,7 +119,6 @@ let sumTotalQuantity;
 async function calculateSum() {
   priceProduct.forEach((e) => {
     sumTotalCalcul.push(e);
-    console.log(e);
   });
 
   sumTotalQuantity = sumTotalCalcul.reduce(sum, 0);
@@ -129,8 +128,6 @@ async function calculateSum() {
 //Changer la quantité d'un produit depuis la page panier avec l'input
 async function changeQuantityCart() {
   const inputQuantity = document.querySelectorAll('#itemQuantity');
-  const btnDelete = document.querySelectorAll('.deleteItem');
-  console.log(btnDelete);
   await calculateSum();
   inputQuantity.forEach((e) => {
     e.addEventListener('change', () => {
@@ -154,9 +151,11 @@ async function changeQuantityCart() {
             'produits',
             JSON.stringify(productInLocalStorage)
           );
-          if (productInLocalStorage[i].quantity === 0) {
+          if (
+            productInLocalStorage[i].quantity === 0 ||
+            productInLocalStorage[i].quantity < 0
+          ) {
             productInLocalStorage.splice(i, 1);
-            console.log(productInLocalStorage);
             localStorage.setItem(
               'produits',
               JSON.stringify(productInLocalStorage)
@@ -173,7 +172,7 @@ function totalPriceCart() {
   setTimeout(() => {
     let priceTotalFinal = [];
     data.forEach((element) => {
-      for (i = 0; i < productInLocalStorage.length; i++) {
+      for (let i = 0; i < productInLocalStorage.length; i++) {
         if (productInLocalStorage[i].id === element._id) {
           let priceCartProduct =
             element.price * productInLocalStorage[i].quantity;
@@ -183,7 +182,6 @@ function totalPriceCart() {
     });
     priceTotalFinal = priceTotalFinal.reduce(sum, 0);
     document.getElementById('totalPrice').textContent = priceTotalFinal;
-    console.log(priceTotalFinal);
   }, 1);
 }
 
@@ -211,7 +209,6 @@ const errorDisplay = (tag, message, valid) => {
   const container = document.getElementsByName(tag);
   const messageError = document.getElementById(tag + 'ErrorMsg');
   if (!valid) {
-    console.log(container);
     messageError.textContent = message;
     container[0].style.border = '3px red solid';
     validInput = false;
@@ -222,7 +219,7 @@ const errorDisplay = (tag, message, valid) => {
   }
 };
 const firstNameChecker = (value) => {
-  if (!value.match(/^[A-Za-zÀ-ÿ-]*$/)) {
+  if (!value.match(/^[A-Za-zÀ-ÿ-]{2,30}$/)) {
     errorDisplay('firstName', "Le prénom n'est pas valide");
     firstName = null;
   } else {
@@ -231,7 +228,7 @@ const firstNameChecker = (value) => {
   }
 };
 const lastNameChecker = (value) => {
-  if (!value.match(/^[A-Za-zÀ-ÿ-]*$/)) {
+  if (!value.match(/^[A-Za-zÀ-ÿ-]{2,30}$/)) {
     errorDisplay('lastName', "Le nom n'est pas valide");
     lastName = null;
   } else {
@@ -299,12 +296,9 @@ input.forEach((input) => {
 //Recuperer les infos client + infos commande
 
 const command = document.getElementById('order');
-let orderId = 0;
 
 command.addEventListener('click', (e) => {
   e.preventDefault();
-  console.log(validInput);
-  console.log(productInLocalStorage);
   if (productInLocalStorage === null || productInLocalStorage.length === 0) {
     alert('Aucun produit dans votre panier.');
   } else if (validInput === true) {
@@ -337,7 +331,6 @@ command.addEventListener('click', (e) => {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response.orderId);
         document.location.href = `confirmation.html?order=${response.orderId}`;
       })
       .catch((err) => {
