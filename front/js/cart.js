@@ -100,7 +100,7 @@ displayPrice();
 //Calucler la quantitée Total des articles
 const sum = (accumulator, currentValue) => accumulator + currentValue;
 let totalQuantityCalculation = [];
-async function calculateQuantity() {
+function calculateQuantity() {
   {
     for (let m = 0; m < productInLocalStorage.length; m++) {
       let quantiteProduitPanier = productInLocalStorage[m].quantity;
@@ -116,7 +116,7 @@ document.getElementById('totalQuantity').textContent = quantityTotal;
 //Calculer la somme Total des Produits
 let sumTotalCalcul = [];
 let sumTotalQuantity;
-async function calculateSum() {
+function calculateSum() {
   priceProduct.forEach((e) => {
     sumTotalCalcul.push(e);
   });
@@ -126,13 +126,11 @@ async function calculateSum() {
 }
 
 //Changer la quantité d'un produit depuis la page panier avec l'input
-async function changeQuantityCart() {
+function changeQuantityCart() {
   const inputQuantity = document.querySelectorAll('#itemQuantity');
-  await calculateSum();
+  calculateSum();
   inputQuantity.forEach((e) => {
     e.addEventListener('change', () => {
-      quantityInLocalStorage();
-      totalPriceCart();
       const valueInput = Number(e.value);
       const article = e.closest('article');
       const articleID = article.dataset.id;
@@ -164,38 +162,37 @@ async function changeQuantityCart() {
           }
         }
       }
+      quantityInLocalStorage();
+      totalPriceCart();
     });
   });
 }
 //J'affiche le prix total dynamiquement
 function totalPriceCart() {
-  setTimeout(() => {
-    let priceTotalFinal = [];
-    data.forEach((element) => {
-      for (let i = 0; i < productInLocalStorage.length; i++) {
-        if (productInLocalStorage[i].id === element._id) {
-          let priceCartProduct =
-            element.price * productInLocalStorage[i].quantity;
-          priceTotalFinal.push(priceCartProduct);
-        }
+  let priceTotalFinal = [];
+  data.forEach((element) => {
+    for (let i = 0; i < productInLocalStorage.length; i++) {
+      if (productInLocalStorage[i].id === element._id) {
+        let priceCartProduct =
+          element.price * productInLocalStorage[i].quantity;
+        priceTotalFinal.push(priceCartProduct);
       }
-    });
-    priceTotalFinal = priceTotalFinal.reduce(sum, 0);
-    document.getElementById('totalPrice').textContent = priceTotalFinal;
-  }, 1);
+    }
+  });
+  priceTotalFinal = priceTotalFinal.reduce(sum, 0);
+  document.getElementById('totalPrice').textContent = priceTotalFinal;
 }
 
 //Changement de la quantitée final dynamiquement
 function quantityInLocalStorage() {
   const displayQuantityFinal = document.getElementById('totalQuantity');
-  setTimeout(() => {
-    let quantityTotalFinal = [];
-    for (let i = 0; i < productInLocalStorage.length; i++) {
-      quantityTotalFinal.push(productInLocalStorage[i].quantity);
-    }
-    quantityTotalFinal = quantityTotalFinal.reduce(sum, 0);
-    displayQuantityFinal.textContent = quantityTotalFinal;
-  }, 1);
+
+  let quantityTotalFinal = [];
+  for (let i = 0; i < productInLocalStorage.length; i++) {
+    quantityTotalFinal.push(productInLocalStorage[i].quantity);
+  }
+  quantityTotalFinal = quantityTotalFinal.reduce(sum, 0);
+  displayQuantityFinal.textContent = quantityTotalFinal;
 }
 
 //Formulaire
